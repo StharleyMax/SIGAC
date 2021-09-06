@@ -1,0 +1,36 @@
+version: '3.5'
+
+services:
+
+  database:
+    container_name: sigac_db
+    image: postgres:12
+    environment:
+      POSTGRES_DB: sigac
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+    ports:
+      - "5432:5432"
+    networks:
+      - sigac-backend
+
+  api:
+    container_name: sigac_api
+    build: .
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/home/api
+      - /home/api/node_modules
+    depends_on:
+      - database
+    environment:
+      DB_PORT: 5432
+      DB_HOST: sigac_db
+    networks:
+      - sigac-backend
+
+
+networks:
+  sigac-backend:
+
