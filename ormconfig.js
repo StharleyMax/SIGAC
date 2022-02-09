@@ -1,8 +1,3 @@
-/*export default {
-
-};
-*/
-
 module.exports = {
   type: process.env.DB_TYPE,
   host: process.env.DB_HOST,
