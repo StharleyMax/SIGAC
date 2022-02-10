@@ -4,20 +4,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from 'typeorm';
-
-import { Client } from './clients.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @OneToMany(() => Client, (client) => client.user)
-  client: Client[];
-
-  //idSup?: string;
 
   @Column({ unique: true })
   registration: string;

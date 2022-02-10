@@ -9,7 +9,7 @@ import { hash } from 'bcrypt';
 import { User } from 'src/database/entities/users.entity';
 import { Repository } from 'typeorm';
 
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { UserRequestDto } from './dto/userRequest.dto';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +29,7 @@ export class UsersService {
   }
 
   //create
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: UserRequestDto): Promise<User> {
     const { registration, password } = createUserDto;
 
     const userExist = await this.userRepository.findOne({ registration });
@@ -51,7 +51,7 @@ export class UsersService {
   }
 
   //update
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(id: string, updateUserDto: UserRequestDto): Promise<User> {
     const existUser = await this.userRepository.findOne({ id });
 
     if (!existUser) {
