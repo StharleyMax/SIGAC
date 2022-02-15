@@ -1,9 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Alarm } from './alarm.entity';
 
 @Entity('clients')
 export class Client {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @ManyToOne(() => Alarm, (alarm) => alarm.client)
+  alarm: Alarm;
 
   @Column()
   gpon: string;
