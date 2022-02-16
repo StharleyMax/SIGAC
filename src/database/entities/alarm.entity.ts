@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -13,7 +13,7 @@ export class Alarm {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(() => Client, (client) => client.alarm)
+  @ManyToOne(() => Client, (client) => client.alarm)
   @JoinColumn({ name: 'id_client' })
   client: Client;
 
