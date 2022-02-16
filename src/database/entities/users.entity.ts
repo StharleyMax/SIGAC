@@ -4,12 +4,18 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Solicitation } from './solicitation.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @OneToMany(() => Solicitation, (solicitation) => solicitation.user)
+  solicitation: Solicitation[];
 
   @Column({ unique: true })
   registration: string;
