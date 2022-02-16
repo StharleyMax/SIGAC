@@ -9,7 +9,7 @@ import {
 import { Alarm } from './alarm.entity';
 import { Solicitation } from './solicitation.entity';
 
-@Entity()
+@Entity('answers')
 export class Answer {
   @PrimaryGeneratedColumn('uuid')
   id: string;

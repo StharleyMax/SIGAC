@@ -1,27 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
-import { CreateSolicitationDto } from './dto/create-solicitation.dto';
-import { UpdateSolicitationDto } from './dto/update-solicitation.dto';
+import { FindConditions, FindOneOptions, Repository } from 'typeorm';
+
+import { Solicitation } from '../../database/entities/solicitation.entity';
+import { SolicitationRequestDto } from './dto/solicitation-request.dto';
+import { SolicitationResponseDto } from './dto/solicitation-response.dto';
+import { SolicitationStatus } from './enum/solicitation-status.enum';
 
 @Injectable()
 export class SolicitationService {
-  create(createSolicitationDto: CreateSolicitationDto) {
-    return 'This action adds a new solicitation';
+  constructor(
+    @InjectRepository(Solicitation)
+    private readonly solicitationRepository: Repository<Solicitation>,
+  ) {}
+
+  async create(createSolicitationDto: SolicitationRequestDto) {
+    return this.solicitationRepository.save({
+      ...createSolicitationDto,
+      status: SolicitationStatus.INIT,
+    });
   }
 
-  findAll() {
-    return `This action returns all solicitation`;
+  async findAll(): Promise<SolicitationResponseDto[]> {
+    return this.solicitationRepository.find({ relations: ['user', 'client'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} solicitation`;
+  async findOne(
+    conditions: FindConditions<Solicitation>,
+    options?: FindOneOptions<Solicitation>,
+  ) {
+    return this.solicitationRepository.findOneOrFail(conditions, options);
   }
 
-  update(id: number, updateSolicitationDto: UpdateSolicitationDto) {
-    return `This action updates a #${id} solicitation`;
-  }
+  async update(id: string, updateSolicitationDto: SolicitationRequestDto) {
+    const { description, complaint } = updateSolicitationDto;
 
-  remove(id: number) {
-    return `This action removes a #${id} solicitation`;
+    const existSolicitation = await this.solicitationRepository.findOne(id);
+
+    if (!existSolicitation)
+      throw new NotFoundException('solicitaton not exist');
+
+    const updateSolicitation = await this.solicitationRepository.preload({
+      id,
+      complaint,
+      description,
+    });
+
+    return this.solicitationRepository.save(updateSolicitation);
   }
 }

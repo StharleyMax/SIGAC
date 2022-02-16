@@ -1,3 +1,4 @@
+import { SolicitationStatus } from 'src/api/solicitation/enum/solicitation-status.enum';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -34,7 +35,7 @@ export class Solicitation {
   description?: string;
 
   @Column()
-  status: string;
+  status: SolicitationStatus;
 
   @Column({ name: 'created_at' })
   createdAt: Date;
