@@ -23,7 +23,9 @@ export class SolicitationService {
   }
 
   async findAll(): Promise<SolicitationResponseDto[]> {
-    return this.solicitationRepository.find({ relations: ['user', 'client'] });
+    return this.solicitationRepository.find({
+      relations: ['user', 'client', 'answer'],
+    });
   }
 
   async findOne(
