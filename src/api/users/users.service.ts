@@ -3,78 +3,68 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 
 import { hash } from 'bcrypt';
-import { User } from 'src/database/entities/users.entity';
-import { Repository } from 'typeorm';
 
-import { UserRequestDto } from './dto/userRequest.dto';
+import { UserRepository } from '../../database/repositories/user.repository';
+import { UserDto } from './dto/user.dto';
+import { UserResponseDto } from './dto/userResponse.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   //find
-  async find(): Promise<User[]> {
+  async find(): Promise<UserResponseDto[]> {
     return this.userRepository.find();
   }
 
   //findByID
-  async findById(id: string): Promise<User> {
-    return this.userRepository.findOne({ id });
+  async findByRegistration(registration: string): Promise<UserResponseDto> {
+    const user = await this.userRepository.findByRegistration(registration);
+    if (!user)
+      throw new NotFoundException(
+        `User registration "${registration}" not found`,
+      );
+    return user;
   }
 
   //create
-  async create(createUserDto: UserRequestDto): Promise<User> {
+  async create(createUserDto: UserDto): Promise<UserResponseDto> {
     const { registration, password } = createUserDto;
-
-    const userExist = await this.userRepository.findOne({ registration });
-
+    const userExist = await this.userRepository.findByRegistration(
+      registration,
+    );
     if (userExist) {
       throw new BadRequestException(
         `User registration ${registration} already exists.`,
       );
     }
-
     const password_hash = await hash(password, 8);
-
     const user = this.userRepository.create({
       ...createUserDto,
       password: password_hash,
     });
-
     return this.userRepository.save(user);
   }
 
   //update
-  async update(id: string, updateUserDto: UserRequestDto): Promise<User> {
-    const existUser = await this.userRepository.findOne({ id });
-
-    if (!existUser) {
-      throw new NotFoundException(`User ID ${id} not found`);
-    }
-
+  async update(id: string, updateUserDto: UserDto): Promise<UserResponseDto> {
+    await this.findByRegistration(updateUserDto.registration);
     const user = await this.userRepository.preload({
       id,
       ...updateUserDto,
       updated_at: new Date(),
     });
-
     return this.userRepository.save(user);
   }
 
   //delete
   async remove(id: string) {
     const existUser = await this.userRepository.find({ id });
-
     if (!existUser) {
       throw new NotFoundException(`User ID ${id} not found`);
     }
-
     return this.userRepository.remove(existUser);
   }
 }

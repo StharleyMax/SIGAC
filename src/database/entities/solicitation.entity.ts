@@ -1,4 +1,3 @@
-import { SolicitationStatus } from 'src/api/solicitation/enum/solicitation-status.enum';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { SolicitationStatus } from '../../api/solicitation/enum/solicitation-status.enum';
 import { Answer } from './answer.entity';
 import { Client } from './clients.entity';
 import { User } from './users.entity';

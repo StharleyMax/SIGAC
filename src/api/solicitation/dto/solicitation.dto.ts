@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { SolicitationStatus } from '../enum/solicitation-status.enum';
-
 export class SolicitationDto {
   @ApiProperty({ description: 'id solicitation', example: 'UUID' })
   id?: string;

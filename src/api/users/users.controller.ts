@@ -14,9 +14,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { User } from 'src/database/entities/users.entity';
-
-import { UserRequestDto } from './dto/userRequest.dto';
+import { User } from '../../database/entities/users.entity';
+import { UserDto } from './dto/user.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
 import { UsersService } from './users.service';
 
@@ -36,12 +35,12 @@ export class UsersController {
     return this.usersService.find();
   }
 
-  @Get('/:id')
-  @ApiOperation({ summary: 'Find user by id' })
+  @Get('/:registration')
+  @ApiOperation({ summary: 'Find user by registration' })
   @ApiResponse({ status: 200, description: 'list user', type: UserResponseDto })
   @ApiResponse({ status: 404, description: 'user not found' })
-  findById(@Param('id') id: string) {
-    return this.usersService.findById(id);
+  findById(@Param('registration') registration: string) {
+    return this.usersService.findByRegistration(registration);
   }
 
   @Post()
@@ -52,7 +51,7 @@ export class UsersController {
     type: UserResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Parameter invalid' })
-  create(@Body() createUserDto: UserRequestDto) {
+  create(@Body() createUserDto: UserDto) {
     return this.usersService.create(createUserDto);
   }
 
@@ -65,7 +64,7 @@ export class UsersController {
   })
   @ApiResponse({ status: 400, description: 'Parameter invalid' })
   @ApiResponse({ status: 404, description: 'user not found' })
-  update(@Param('id') id: string, @Body() updateUserDto: UserRequestDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
