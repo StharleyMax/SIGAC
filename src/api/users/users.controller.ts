@@ -17,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { User } from '../../database/entities/users.entity';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserDto } from './dto/user.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
 import { UsersService } from './users.service';
@@ -36,6 +37,11 @@ export class UsersController {
   })
   find() {
     return this.usersService.find();
+  }
+
+  @Get('me')
+  async getMe(@CurrentUser() user) {
+    return user;
   }
 
   @Get('/:registration')
