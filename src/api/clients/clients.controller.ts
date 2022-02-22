@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ClientsService } from './clients.service';
@@ -7,6 +16,7 @@ import { ClientResponseDto } from './dto/clientResponse.dto';
 
 @Controller('clients')
 @ApiTags('Client')
+@UseGuards(AuthGuard('jwt'))
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 

@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { SolicitationRequestDto } from './dto/solicitation-request.dto';
 import { SolicitationDto } from './dto/solicitation.dto';
 import { SolicitationService } from './solicitation.service';
 
 @Controller('solicitation')
+@UseGuards(AuthGuard('jwt'))
 export class SolicitationController {
   constructor(private readonly solicitationService: SolicitationService) {}
 

@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { AnswerService } from './answer.service';
 import { AnswerResponseDto } from './dto/answer-response.dto';
 import { AnswerDto } from './dto/answer.dto';
 
 @Controller('answer')
+@UseGuards(AuthGuard('jwt'))
 export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
 

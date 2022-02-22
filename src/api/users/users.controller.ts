@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiCreatedResponse,
   ApiOperation,
@@ -21,6 +23,7 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 @ApiTags('users')
+@UseGuards(AuthGuard('jwt'))
 export class UsersController {
   constructor(readonly usersService: UsersService) {}
 

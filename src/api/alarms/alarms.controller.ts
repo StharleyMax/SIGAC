@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 
 import { AlarmsService } from './alarms.service';
@@ -6,6 +15,7 @@ import { AlarmPartialDto } from './dto/alarm-partial.dto';
 import { AlarmDto } from './dto/alarm.dto';
 
 @Controller('alarms')
+@UseGuards(AuthGuard('jwt'))
 export class AlarmsController {
   constructor(private readonly alarmsService: AlarmsService) {}
 
