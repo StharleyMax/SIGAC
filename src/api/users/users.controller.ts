@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Post,
@@ -9,14 +8,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import {
-  ApiCreatedResponse,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { User } from '../../database/entities/users.entity';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserDto } from './dto/user.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
@@ -40,7 +33,7 @@ export class UsersController {
   }
 
   @Get('me')
-  async getMe(@CurrentUser() user) {
+  async getMe(@CurrentUser() user): Promise<UserResponseDto> {
     return user;
   }
 
@@ -75,14 +68,5 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'user not found' })
   update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     return this.usersService.update(id, updateUserDto);
-  }
-
-  @Delete('/:id')
-  @ApiOperation({ summary: 'Delete user' })
-  @ApiResponse({ status: 204, description: 'delete user success' })
-  @ApiResponse({ status: 404, description: 'user not found' })
-  @ApiCreatedResponse({ type: User })
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
   }
 }

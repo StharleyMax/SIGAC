@@ -9,6 +9,7 @@ import { hash } from 'bcrypt';
 import { UserRepository } from '../../database/repositories/user.repository';
 import { UserDto } from './dto/user.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
+import { UsersMap } from './map/users.map';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,8 @@ export class UsersService {
 
   //find
   async find(): Promise<UserResponseDto[]> {
-    return this.userRepository.find();
+    const users = await this.userRepository.find();
+    return UsersMap.toDtoAllUsers(users);
   }
 
   //findByID
@@ -26,7 +28,7 @@ export class UsersService {
       throw new NotFoundException(
         `User registration "${registration}" not found`,
       );
-    return user;
+    return UsersMap.toDto(user);
   }
 
   //create
@@ -45,7 +47,8 @@ export class UsersService {
       ...createUserDto,
       password: password_hash,
     });
-    return this.userRepository.save(user);
+    await this.userRepository.save(user);
+    return UsersMap.toDto(user);
   }
 
   //update
@@ -56,15 +59,7 @@ export class UsersService {
       ...updateUserDto,
       updated_at: new Date(),
     });
-    return this.userRepository.save(user);
-  }
-
-  //delete
-  async remove(id: string) {
-    const existUser = await this.userRepository.find({ id });
-    if (!existUser) {
-      throw new NotFoundException(`User ID ${id} not found`);
-    }
-    return this.userRepository.remove(existUser);
+    await this.userRepository.save(user);
+    return UsersMap.toDto(user);
   }
 }

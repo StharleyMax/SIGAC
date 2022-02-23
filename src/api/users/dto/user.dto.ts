@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IUserDto } from '../interfaces/IUser.interface';
+export class UserDto {
+  @ApiProperty({ description: 'ID', example: 'UUID' })
+  id?: string;
 
-export class UserDto implements IUserDto {
   @ApiProperty({ description: 'registration', example: 'tr00000' })
   registration: string;
 
