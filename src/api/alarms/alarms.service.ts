@@ -1,18 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 
-import { FindConditions, FindOneOptions, Repository } from 'typeorm';
-
-import { Alarm } from '../../database/entities/alarm.entity';
-import { AlarmPartialDto } from './dto/alarm-partial.dto';
+import { AlarmRepository } from '../../database/repositories/alarm.repository';
+import { AlarmResponseDto } from './dto/alarm-response.dto';
 import { AlarmDto } from './dto/alarm.dto';
+import { AlarmMap } from './map/alarm.map';
 
 @Injectable()
 export class AlarmsService {
-  constructor(
-    @InjectRepository(Alarm)
-    private readonly alarmRepository: Repository<Alarm>,
-  ) {}
+  constructor(private readonly alarmRepository: AlarmRepository) {}
 
   async create(createAlarmDto: AlarmDto) {
     return this.alarmRepository.save(createAlarmDto);
@@ -22,18 +17,14 @@ export class AlarmsService {
     return this.alarmRepository.find();
   }
 
-  async findOneOrFail(
-    conditions: FindConditions<AlarmPartialDto>,
-    options?: FindOneOptions<AlarmPartialDto>,
-  ) {
-    try {
-      return this.alarmRepository.findOneOrFail(conditions, options);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+  async findOne(id: string): Promise<AlarmResponseDto> {
+    const alarm = await this.alarmRepository.findOne(id, {
+      relations: ['answer', 'client'],
+    });
+    return AlarmMap.toDto(alarm);
   }
 
-  async update(id: string, updateAlarmDto: AlarmPartialDto) {
+  async update(id: string, updateAlarmDto: AlarmDto) {
     const existAlarm = await this.alarmRepository.findOne({ id });
 
     if (!existAlarm) throw new NotFoundException('Alarm not found');
@@ -42,7 +33,7 @@ export class AlarmsService {
       id,
       ...updateAlarmDto,
     });
-
-    return this.alarmRepository.save(updateAlarm);
+    await this.alarmRepository.save(updateAlarm);
+    return AlarmMap.toDto(updateAlarm);
   }
 }

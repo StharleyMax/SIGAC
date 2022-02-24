@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from 'src/database/entities/clients.entity';
 import { Repository } from 'typeorm';
 
-import { ClientRequestDto } from './dto/clientRequest.dto';
-import { ClientResponseDto } from './dto/clientResponse.dto';
+import { ClientResponseDto } from './dto/client-response.dto';
+import { ClientDto } from './dto/client.dto';
 
 @Injectable()
 export class ClientsService {
@@ -22,24 +22,20 @@ export class ClientsService {
     return this.clientRepository.findOne({ id });
   }
 
-  async create(crateClientDto: ClientRequestDto): Promise<ClientResponseDto> {
-    console.log({ crateClientDto });
-
+  async create(crateClientDto: ClientDto): Promise<ClientResponseDto> {
     return this.clientRepository.save(crateClientDto);
   }
 
   async update(
     id: string,
-    updateClientDto: ClientRequestDto,
+    updateClientDto: ClientDto,
   ): Promise<ClientResponseDto> {
     const clientExist = await this.clientRepository.findOne({ id });
     if (!clientExist) throw new NotFoundException(`Client ID ${id} not found`);
-
     const client = await this.clientRepository.preload({
       id,
       ...updateClientDto,
     });
-
     return this.clientRepository.save(client);
   }
 }

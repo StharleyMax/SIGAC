@@ -1,4 +1,4 @@
-import { ClientResponseDto } from 'src/api/clients/dto/clientResponse.dto';
+import { ClientResponseDto } from 'src/api/clients/dto/client-response.dto';
 
 import { SolicitationDto } from './solicitation.dto';
 

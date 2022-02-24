@@ -11,8 +11,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ClientsService } from './clients.service';
-import { ClientRequestDto } from './dto/clientRequest.dto';
-import { ClientResponseDto } from './dto/clientResponse.dto';
+import { ClientResponseDto } from './dto/client-response.dto';
+import { ClientDto } from './dto/client.dto';
 
 @Controller('clients')
 @ApiTags('Client')
@@ -27,6 +27,7 @@ export class ClientsController {
     description: 'list all Client',
     type: [ClientResponseDto],
   })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
   async findAll(): Promise<ClientResponseDto[]> {
     return this.clientsService.findAll();
   }
@@ -38,22 +39,35 @@ export class ClientsController {
     description: 'list Client',
     type: [ClientResponseDto],
   })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
   @ApiResponse({ status: 404, description: 'Client not found' })
   async findById(@Param('id') id: string): Promise<ClientResponseDto> {
     return this.clientsService.findById(id);
   }
 
   @Post()
-  async create(
-    @Body() createClientDto: ClientRequestDto,
-  ): Promise<ClientResponseDto> {
+  @ApiResponse({
+    status: 201,
+    description: 'Create Client',
+    type: [ClientResponseDto],
+  })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
+  async create(@Body() createClientDto: ClientDto): Promise<ClientResponseDto> {
     return this.clientsService.create(createClientDto);
   }
 
   @Put(':id')
+  @Post()
+  @ApiResponse({
+    status: 201,
+    description: 'Update',
+    type: [ClientResponseDto],
+  })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
+  @ApiResponse({ status: 404, description: 'Client not found' })
   async update(
     @Param('id') id: string,
-    @Body() updateClientDto: ClientRequestDto,
+    @Body() updateClientDto: ClientDto,
   ): Promise<ClientResponseDto> {
     return this.clientsService.update(id, updateClientDto);
   }

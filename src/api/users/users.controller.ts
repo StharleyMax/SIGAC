@@ -28,6 +28,7 @@ export class UsersController {
     description: 'list users',
     type: [UserResponseDto],
   })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
   find() {
     return this.usersService.find();
   }
@@ -40,6 +41,7 @@ export class UsersController {
   @Get('/:registration')
   @ApiOperation({ summary: 'Find user by registration' })
   @ApiResponse({ status: 200, description: 'list user', type: UserResponseDto })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
   @ApiResponse({ status: 404, description: 'user not found' })
   findById(@Param('registration') registration: string) {
     return this.usersService.findByRegistration(registration);
@@ -53,6 +55,7 @@ export class UsersController {
     type: UserResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Parameter invalid' })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
   create(@Body() createUserDto: UserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -65,6 +68,7 @@ export class UsersController {
     type: UserResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Parameter invalid' })
+  @ApiResponse({ status: 401, description: 'unauthorized access' })
   @ApiResponse({ status: 404, description: 'user not found' })
   update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     return this.usersService.update(id, updateUserDto);

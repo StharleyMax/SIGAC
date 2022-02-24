@@ -11,7 +11,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 
 import { AlarmsService } from './alarms.service';
-import { AlarmPartialDto } from './dto/alarm-partial.dto';
 import { AlarmDto } from './dto/alarm.dto';
 
 @Controller('alarms')
@@ -34,12 +33,12 @@ export class AlarmsController {
   @Get(':id')
   @ApiOperation({ summary: `This action returns a #ID alarm` })
   findOne(@Param('id') id: string) {
-    return this.alarmsService.findOneOrFail({ id });
+    return this.alarmsService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: `This action update #ID alarms` })
-  update(@Param('id') id: string, @Body() updateAlarmDto: AlarmPartialDto) {
+  update(@Param('id') id: string, @Body() updateAlarmDto: AlarmDto) {
     return this.alarmsService.update(id, updateAlarmDto);
   }
 }

@@ -7,7 +7,7 @@ export class AlarmDto {
   id: string;
 
   @ApiProperty({ description: 'id cliente', example: 'UUID' })
-  client: any;
+  idClient: string;
 
   @ApiProperty({ description: 'type alarm', example: 'major | warn | minor' })
   type: string;

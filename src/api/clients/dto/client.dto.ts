@@ -2,9 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IsOptional, IsString } from 'class-validator';
 
-import { IClientDto } from '../interfaces/client.interface';
-
-export class ClientDto implements IClientDto {
+export class ClientDto {
   @IsString()
   @ApiProperty({ description: 'client identified field', example: '4-ABC123' })
   gpon: string;

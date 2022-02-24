@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Alarm } from 'src/database/entities/alarm.entity';
-
+import { AlarmRepository } from '../../database/repositories/alarm.repository';
 import { AlarmsController } from './alarms.controller';
 import { AlarmsService } from './alarms.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Alarm])],
+  imports: [TypeOrmModule.forFeature([AlarmRepository])],
   controllers: [AlarmsController],
   providers: [AlarmsService],
 })

@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
-import { ClientResponseDto } from 'src/api/clients/dto/clientResponse.dto';
+import { ClientResponseDto } from 'src/api/clients/dto/client-response.dto';
 import { UserResponseDto } from 'src/api/users/dto/userResponse.dto';
 
 import { SolicitationStatus } from '../enum/solicitation-status.enum';
