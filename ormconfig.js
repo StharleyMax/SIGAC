@@ -2,6 +2,9 @@ console.log('DATABASE_URL: ', process.env.DATABASE_URL);
 module.exports = {
   type: process.env.DB_TYPE,
   url: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
   entities: ['./dist/**/*.entity.js'],
   migrations: ['./dist/migrations/*.js'],
   cli: {
