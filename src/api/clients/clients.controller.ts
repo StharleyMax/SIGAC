@@ -37,7 +37,7 @@ export class ClientsController {
   @ApiResponse({
     status: 200,
     description: 'list Client',
-    type: [ClientResponseDto],
+    type: ClientResponseDto,
   })
   @ApiResponse({ status: 401, description: 'unauthorized access' })
   @ApiResponse({ status: 404, description: 'Client not found' })
@@ -49,7 +49,7 @@ export class ClientsController {
   @ApiResponse({
     status: 201,
     description: 'Create Client',
-    type: [ClientResponseDto],
+    type: ClientResponseDto,
   })
   @ApiResponse({ status: 401, description: 'unauthorized access' })
   async create(@Body() createClientDto: ClientDto): Promise<ClientResponseDto> {
@@ -57,11 +57,10 @@ export class ClientsController {
   }
 
   @Put(':id')
-  @Post()
   @ApiResponse({
     status: 201,
     description: 'Update',
-    type: [ClientResponseDto],
+    type: ClientResponseDto,
   })
   @ApiResponse({ status: 401, description: 'unauthorized access' })
   @ApiResponse({ status: 404, description: 'Client not found' })

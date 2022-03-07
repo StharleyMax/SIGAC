@@ -9,12 +9,13 @@ import { AlarmMap } from './map/alarm.map';
 export class AlarmsService {
   constructor(private readonly alarmRepository: AlarmRepository) {}
 
-  async create(createAlarmDto: AlarmDto) {
-    return this.alarmRepository.save(createAlarmDto);
+  async create(createAlarmDto: AlarmDto): Promise<AlarmResponseDto> {
+    const alarm = await this.alarmRepository.save(createAlarmDto);
+    return AlarmMap.toDto(alarm);
   }
 
   async findAll() {
-    return this.alarmRepository.find();
+    return AlarmMap.allToDto(await this.alarmRepository.find());
   }
 
   async findOne(id: string): Promise<AlarmResponseDto> {
