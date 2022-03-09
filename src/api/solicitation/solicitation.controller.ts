@@ -10,6 +10,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { SolicitationResponseDto } from './dto/solicitation-response.dto';
 import { SolicitationDto } from './dto/solicitation.dto';
 import { SolicitationService } from './solicitation.service';
@@ -30,8 +31,9 @@ export class SolicitationController {
   @ApiResponse({ status: 401, description: 'unauthorized access' })
   create(
     @Body() createSolicitationDto: SolicitationDto,
+    @CurrentUser() user,
   ): Promise<SolicitationResponseDto> {
-    return this.solicitationService.create(createSolicitationDto);
+    return this.solicitationService.create(createSolicitationDto, user.userId);
   }
 
   @Get()
@@ -42,8 +44,8 @@ export class SolicitationController {
     type: [SolicitationResponseDto],
   })
   @ApiResponse({ status: 401, description: 'unauthorized access' })
-  findAll() {
-    return this.solicitationService.findAll();
+  findAll(@CurrentUser() user) {
+    return this.solicitationService.findAll(user.userId);
   }
 
   @Get(':id')
@@ -55,8 +57,11 @@ export class SolicitationController {
   })
   @ApiResponse({ status: 401, description: 'unauthorized access' })
   @ApiResponse({ status: 404, description: 'not found solicitation' })
-  findOne(@Param('id') id: string): Promise<SolicitationResponseDto> {
-    return this.solicitationService.findOne(id);
+  findOne(
+    @Param('id') id: string,
+    @CurrentUser() user,
+  ): Promise<SolicitationResponseDto> {
+    return this.solicitationService.findOne(id, user.userId);
   }
 
   @Patch(':id')

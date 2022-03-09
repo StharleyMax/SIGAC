@@ -15,25 +15,31 @@ export class SolicitationService {
 
   async create(
     createSolicitationDto: SolicitationDto,
+    idUser,
   ): Promise<SolicitationResponseDto> {
     const create = await this.solicitationRepository.save({
       ...createSolicitationDto,
       status: SolicitationStatus.INIT,
+      user: idUser,
     });
     return SolicitationMap.toDto(create);
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     const solicitations = await this.solicitationRepository.find({
       relations: ['user', 'client', 'answer'],
+      where: { user: userId },
     });
     return SolicitationMap.allToDto(solicitations);
   }
 
-  async findOne(id: string): Promise<SolicitationResponseDto> {
-    return this.solicitationRepository.findOne(id, {
+  async findOne(id: string, userId: string): Promise<SolicitationResponseDto> {
+    const solicitation = await this.solicitationRepository.findOne(id, {
       relations: ['user', 'client', 'answer'],
+      where: { user: userId },
     });
+
+    return SolicitationMap.toDto(solicitation);
   }
 
   async update(
