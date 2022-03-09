@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Client } from 'src/database/entities/clients.entity';
@@ -6,6 +10,7 @@ import { Repository } from 'typeorm';
 
 import { ClientResponseDto } from './dto/client-response.dto';
 import { ClientDto } from './dto/client.dto';
+import { ClientsMap } from './map/clients.map';
 
 @Injectable()
 export class ClientsService {
@@ -19,11 +24,19 @@ export class ClientsService {
   }
 
   async findById(id: string): Promise<ClientResponseDto> {
-    return this.clientRepository.findOne({ id });
+    return ClientsMap.toDto(await this.clientRepository.findOne({ id }));
   }
 
-  async create(crateClientDto: ClientDto): Promise<ClientResponseDto> {
-    return this.clientRepository.save(crateClientDto);
+  async create(createClientDto: ClientDto): Promise<ClientResponseDto> {
+    const clientExist = await this.clientRepository.findOne({
+      gpon: createClientDto.gpon,
+    });
+    if (clientExist)
+      throw new BadRequestException(
+        `Client GPON ${createClientDto.gpon} exist`,
+      );
+    const client = await this.clientRepository.save(createClientDto);
+    return ClientsMap.toDto(client);
   }
 
   async update(

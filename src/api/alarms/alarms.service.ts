@@ -15,7 +15,11 @@ export class AlarmsService {
   }
 
   async findAll() {
-    return AlarmMap.allToDto(await this.alarmRepository.find());
+    const alarm = await this.alarmRepository.find({
+      relations: ['answer', 'client'],
+    });
+
+    return AlarmMap.allToDto(alarm);
   }
 
   async findOne(id: string): Promise<AlarmResponseDto> {
