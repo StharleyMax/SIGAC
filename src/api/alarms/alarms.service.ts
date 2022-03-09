@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AlarmRepository } from '../../database/repositories/alarm.repository';
 import { AlarmResponseDto } from './dto/alarm-response.dto';
 import { AlarmDto } from './dto/alarm.dto';
-import { AlarmMap } from './map/alarm.map';
+import { AlarmAllMap, AlarmMap } from './map/alarm.map';
 
 @Injectable()
 export class AlarmsService {
@@ -19,7 +19,7 @@ export class AlarmsService {
       relations: ['answer', 'client'],
     });
 
-    return AlarmMap.allToDto(alarm);
+    return AlarmAllMap.allToDto(alarm);
   }
 
   async findOne(id: string): Promise<AlarmResponseDto> {

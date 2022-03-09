@@ -3,7 +3,7 @@ import { Alarm } from 'src/database/entities/alarm.entity';
 import { AlarmResponseDto } from '../dto/alarm-response.dto';
 
 export class AlarmAllMap {
-  static async allToDto(alarms: Alarm[]) {
+  static allToDto(alarms: Alarm[]) {
     return {
       alarms: alarms.map((alarm) => AlarmMap.toDto(alarm)),
     };
@@ -11,7 +11,7 @@ export class AlarmAllMap {
 }
 
 export class AlarmMap {
-  static async toDto(alarm: Alarm): Promise<AlarmResponseDto> {
+  static toDto(alarm: Alarm): AlarmResponseDto {
     if (!alarm) return undefined;
     console.log('toDto: ', alarm);
     return {

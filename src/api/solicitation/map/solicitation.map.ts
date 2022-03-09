@@ -2,8 +2,7 @@ import { Solicitation } from '../../../database/entities/solicitation.entity';
 import { SolicitationResponseDto } from '../dto/solicitation-response.dto';
 
 export class SolicitationMap {
-  static async allToDto(solicitations: Solicitation[]) {
-    if (!solicitations) return undefined;
+  static allToDto(solicitations: Solicitation[]) {
     return {
       solicitations: solicitations.map((solicitation) =>
         this.toDto(solicitation),
@@ -11,9 +10,9 @@ export class SolicitationMap {
     };
   }
 
-  static async toDto(
+  static toDto(
     solicitation: Solicitation,
-  ): Promise<SolicitationResponseDto | undefined> {
+  ): SolicitationResponseDto | undefined {
     if (!solicitation) return undefined;
     return {
       id: solicitation.id,
